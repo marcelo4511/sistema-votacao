@@ -2,13 +2,13 @@
   <div>
      <div>
       <md-toolbar :md-elevation="1">
-        <span class="md-title">{{form.title}}</span>
+        <span class="md-title"><i class="fa fa-comments"></i> {{form.title}}</span>
       </md-toolbar>
 
       <md-list>
         <md-item class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
-            <h4>{{form.option1}}</h4>
+            <h4><i class="fa fa-arrow-right"></i> {{form.option1}}</h4>
           </div>
            <form class="md-layout-item md-size-15">
             <md-button class="md-raised md-black " @click.prevent="total1"><i class="fa fa-check-square"></i>Votar</md-button>
@@ -20,7 +20,7 @@
 
         <md-item class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
-            <h4>{{form.option2}}</h4>
+            <h4><i class="fa fa-arrow-right"></i> {{form.option2}}</h4>
           </div>
            <div class="md-layout-item md-size-15">
             <md-button class="md-raised md-black" @click="total2"><i class="fa fa-check-square"></i>Votar</md-button>
@@ -32,7 +32,7 @@
 
         <md-item class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
-            <h4>{{form.option3}}</h4>
+            <h4><i class="fa fa-arrow-right"></i> {{form.option3}}</h4>
           </div>
            <div class="md-layout-item md-size-15">
             <md-button class="md-raised md-black" @click="total3"><i class="fa fa-check-square"></i>Votar</md-button>
@@ -107,5 +107,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    cursor:grab;
   }
 </style>

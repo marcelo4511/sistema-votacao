@@ -98,19 +98,21 @@
             <md-table-cell>{{form.datefinal | formatDate}}</md-table-cell>
             <md-table-cell>{{form.status}}</md-table-cell>
             <md-table-cell>
-              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status === 'em andamento'"  tag="button" class="md-raised md-black"><i class="fa fa-check-square">Votar</i></md-button>
-              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status !== 'em andamento'" disabled="disabled" tag="button" class="md-raised md-black"><i class="fa fa-check-square">Votar</i></md-button>
+              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status === 'em andamento'"  tag="button" class="md-raised md-black linha"><i class="fa fa-check-square">Votar</i></md-button>
+              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status !== 'em andamento'" disabled="disabled" tag="button" class="md-raised md-black linha" ><i class="fa fa-check-square">Votar</i></md-button>
               <md-button class="md-raised md-primary" v-on:click="editSurvey(form)"><i class="fa fa-pencil"></i> Editar</md-button>
               <md-button class="md-raised md-accent" v-on:click="removeSurvey(form)"><i class="fa fa-trash"></i>Deletar</md-button>
             </md-table-cell>
           </md-table-row>
       </md-table>
+
+      <Pagination :source="pagination" @navigate="navigate"></Pagination>
   </div>
 </template>
 
 <script>
-  //import api from '../../config/api'
   import axios from 'axios'
+  import Pagination from '../Pagination'
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -119,6 +121,9 @@
 
   export default {
     name: 'FormValidation',
+    components:{
+      Pagination,
+    },
     mixins: [validationMixin],
     data: () => ({
       form: {
@@ -132,6 +137,7 @@
       },
       search:'',
       survey:[],
+      pagination:[],
       isEdit:false,
       surveySaved: false,
       surveyUpdated:false,
@@ -162,7 +168,7 @@
       }
     },
     created(){
-      this.getSurvey()
+      this.navigate()
     },
 
     methods: {
@@ -175,6 +181,7 @@
           }
         }
       },
+      
       clearForm () {
         this.$v.$reset()
         this.form.title = null
@@ -197,7 +204,7 @@
          }).then(resposta => {
             this.survey.push(resposta.data)
             this.$toasted.global.defaultSuccess()
-            this.getSurvey()
+            this.navigate()
          })
         
         window.setTimeout(() => {
@@ -223,7 +230,7 @@
          }).then(resposta => {
             this.survey.push(resposta.data)
             this.isEdit = false
-            this.getSurvey()
+            this.navigate()
          })
         
         window.setTimeout(() => {
@@ -241,10 +248,11 @@
               this.surveyUser()
             }
       },
-       async getSurvey(){
-       await axios.get('http://localhost:8000/api/survey')
+        navigate(page){
+          axios.get('http://localhost:8000/api/survey?page='+page)
           .then( res => {
-            this.survey = res.data
+            this.survey = res.data.data
+            this.pagination = res.data
 
               this.survey.map(form => {
                   let dateNow = new Date()
@@ -271,7 +279,7 @@
             await axios.delete(`http://localhost:8000/api/survey/${form.id}`,{
               }).then(res => {
                 this.survey.splice(res.data.id,form)
-            this.getSurvey()
+            this.navigate()
           })
          }
       }
@@ -292,5 +300,12 @@
     top: 0;
     right: 0;
     left: 0;
+  }
+
+  .linha{
+    width:100px;
+    margin:0px;
+    margin-top: 6px;
+    margin-right: 8px;
   }
 </style>

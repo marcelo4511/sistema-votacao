@@ -14,7 +14,7 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        $survey = Survey::all();
+        $survey = Survey::paginate(2);
         return response()->json($survey,200);
     }
 
