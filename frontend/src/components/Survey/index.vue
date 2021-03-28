@@ -81,18 +81,37 @@
       
       
     </form>
-      
-      <input type="text" style="float:center;" class="form-control col-md-3 m-5" placeholder="Buscar" v-model="search">
 
-      <md-table>
+    <div class="row d-flex justify-content-between">
+
+      <select name="" id="" class="form-control col-md-1 mt-5 ml-4" v-model="perPage" @change="navigate">
+          <option selected default value="0"></option>
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="15">15</option>
+      </select>
+      <input type="search" style="float:center;" class="form-control col-md-3 mt-5 mr-5" placeholder="Buscar" v-model.trim="search" @input="getSurvey">
+    </div>
+
+      <md-table class="mt-2">
         <md-table-row>
-          <md-table-head>Título</md-table-head>
-          <md-table-head>Data Inicial</md-table-head>
-          <md-table-head>Data Final</md-table-head>
-          <md-table-head>Status</md-table-head>
-          <md-table-head>Ações</md-table-head>
+          <th v-for="column in columns" :key="column" @click="sortByColumn(column)"
+              class="table-head">
+            {{ column| columnHead }}
+            {{ column| col }}
+            <span v-if="column === sortedColumn">
+              <i v-if="order === 'asc' " class="fa fa-arrow-up"></i>
+              <i v-else class="fa fa-arrow-down"></i>
+            </span>
+          </th>
+    
         </md-table-row>
-          <md-table-row v-for="(form,i) in searching" :key="i">
+          <md-table-row v-for="(form,key) in survey" :key="key">
+
+             <tr class="" v-if="survey.length === 0">
+              <td class="lead text-center" :colspan="columns.length + 1">não há registros.</td>
+                <td class="lead text-center">não há registros.</td>
+            </tr>
             <md-table-cell>{{form.title}}</md-table-cell>
             <md-table-cell>{{form.dateinicial | formatDate}}</md-table-cell>
             <md-table-cell>{{form.datefinal | formatDate}}</md-table-cell>
@@ -106,13 +125,33 @@
           </md-table-row>
       </md-table>
 
-      <Pagination :source="pagination" @navigate="navigate"></Pagination>
+      <div class="mt-2" v-show="survey == 0">
+          <div style="text-align:center;">Não há enquetes.</div>
+      </div>
+
+      <div class="form-row d-flex justify-content-between mt-1">
+      <span> &nbsp; <i>Mostrando de  {{ pagination.from }} até  {{ pagination.to }} de {{ pagination.total }} registros.</i></span>
+      <nav v-if="pagination && survey.length > 0" >
+        <ul class="pagination">
+          <li class="page-item" :class="{'disabled' : currentPage === 1}">
+            <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Anterior</a>
+          </li>
+          <li v-for="page in pagesNumber" :key="page" class="page-item"
+              :class="{'active': page == pagination.current_page}">
+            <a href="javascript:void(0)" @click.prevent="changePage(page)" class="page-link">{{ page }}</a>
+          </li>
+          <li class="page-item" :class="{'disabled': currentPage === pagination.last_page }">
+            <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Próximo</a>
+          </li>
+        </ul>
+      </nav>
+        
+      </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import Pagination from '../Pagination'
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -121,9 +160,6 @@
 
   export default {
     name: 'FormValidation',
-    components:{
-      Pagination,
-    },
     mixins: [validationMixin],
     data: () => ({
       form: {
@@ -137,12 +173,21 @@
       },
       search:'',
       survey:[],
-      pagination:[],
+      url: '',
+      pagination: {
+        data: { to: 1, from: 1 }
+      },
+      offset: 4,
+      currentPage: 1,
+      perPage: 5,
       isEdit:false,
       surveySaved: false,
       surveyUpdated:false,
       sending: false,
-      lastUser: null
+      lastUser: null,
+      columns:['title','dateinicial','datefinal','status'],
+      sortedColumn:['title'],
+      order: 'asc',
     }),
     validations: {
       form: {
@@ -182,6 +227,11 @@
         }
       },
       
+      getIf(){
+        if(this.columns[0] == 'title') {
+          return this.columns[0] = 'Título'
+        }
+      },
       clearForm () {
         this.$v.$reset()
         this.form.title = null
@@ -191,6 +241,18 @@
         this.form.option2 = null
         this.form.option3 = null
       },
+        sortByColumn(column) {
+      if (column === this.sortedColumn) {
+        this.order = (this.order === 'asc') ? 'desc' : 'asc'
+      } else {
+        this.sortedColumn = column
+        this.order = 'asc'
+      }
+      this.navigate()
+    },
+    getSurvey(){
+        this.navigate()
+    },
      async surveyUser () {
         this.sending = true
          await axios.post('http://localhost:8000/api/survey',{
@@ -218,6 +280,9 @@
         this.isEdit = true
         this.form = form      
       },
+       serialNumber(key) {
+      return (this.currentPage - 1) * this.perPage + 1 + key
+    },
       updateSurvey(){
         axios.put(`http://localhost:8000/api/survey/${this.form.id}`,{
            title:this.form.title,
@@ -248,13 +313,13 @@
               this.surveyUser()
             }
       },
-        navigate(page){
-          axios.get('http://localhost:8000/api/survey?page='+page)
-          .then( res => {
-            this.survey = res.data.data
-            this.pagination = res.data
-
-              this.survey.map(form => {
+        navigate(){
+          
+          axios.get(`http://localhost:8000/api/survey?page=${this.currentPage}&pesquisa=${this.search}&column=${this.sortedColumn}&order=${this.order}&per_page=${this.perPage}`)
+          .then( ({ data }) => {
+            this.survey = data.data
+            this.pagination = data
+            this.survey.map(form => {
                   let dateNow = new Date()
                    dateNow.toLocaleDateString("pt-BR")
                   let dateinicial = new Date(form.dateinicial)
@@ -273,6 +338,10 @@
             
         })
       },
+      changePage(pageNumber) {
+      this.currentPage = pageNumber
+      this.navigate()
+    },
       async removeSurvey(form){
          let response = confirm(`Está certo de que fazer isso??${form.title}`)
           if(response) {
@@ -285,12 +354,48 @@
       }
     },
     computed:{
-      searching:function() {
-            return this.survey.filter(form => {
-                return form.title.includes(this.search)
-            })
-        },
-    }
+      pagesNumber() {
+        if (!this.pagination.to) {
+          return []
+        }
+        let from = this.pagination.current_page - this.offset
+        if (from < 1) {
+          from = 1
+        }
+        let to = from + (this.offset * 2)
+        if (to >= this.pagination.last_page) {
+          to = this.pagination.last_page
+            
+        }
+        let pagesArray = []
+        for (let page = from; page <= to; page++) {
+          pagesArray.push(page)
+        }
+        return pagesArray
+      },
+      totalData() {
+        return (this.pagination.to - this.pagination.from) + 1
+      },
+    },
+    filters: {
+      columnHead(value) {
+
+      if(value == 'title') {
+        value = 'Título'
+      }
+        return value.split('_').join(' ').toUpperCase()
+      },
+      col(value){
+             if(value == 'dateinicial') {
+              value = 'Data Inicial'
+             }
+      },
+      t(value) {
+        if(value == 'datefinal') {
+          value = 'Data Final'
+        }
+      }
+    },
   }
 </script>
 

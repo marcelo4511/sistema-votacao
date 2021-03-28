@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Survey;
+use Illuminate\Support\Facades\DB;
 
 class SurveyController extends Controller
 {
@@ -12,18 +13,19 @@ class SurveyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $survey = Survey::paginate(2);
-        return response()->json($survey,200);
+        $pesquisa = $request->get('pesquisa');
+         $survey = Survey::when($request['pesquisa'],function($query) use($pesquisa) {
+             $query->where('title','LIKE',"$pesquisa%")
+             ->orWhere(DB::raw("(DATE_FORMAT(dateinicial,'%d/%m/%Y'))"),'LIKE',"$pesquisa%")
+             ->orWhere(DB::raw("(DATE_FORMAT(datefinal,'%d/%m/%Y'))"),'LIKE',"$pesquisa%")
+             ->where('status','LIKE',"$pesquisa%");
+         })->orderBy($request->column, $request->order)->paginate(intval($request->per_page));
+         return response()->json($survey,200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function save1(Request $request,$id)
+    function save1(Request $request,$id)
     {
         $count = Survey::find($id);
 

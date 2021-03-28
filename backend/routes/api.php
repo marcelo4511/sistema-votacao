@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
     Route::get('/survey','SurveyController@index');
+   // Route::get('/search','SurveyController@search');
     Route::get('/survey/{id}','SurveyController@show');
     Route::post('/survey','SurveyController@store');
     Route::post('/surveytotal1/{id}','SurveyController@save1');
