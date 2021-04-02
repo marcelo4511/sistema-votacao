@@ -51,6 +51,7 @@ import axios from 'axios'
 export default {
   created(){
     this.getSurvey()
+  
   },
   data(){
     return {
@@ -59,15 +60,18 @@ export default {
   },
   methods:{
      getSurvey(){
+         setInterval(function () {
        axios.get(`http://localhost:8000/api/survey/${this.$route.params.form}`)
       .then(res => {
         this.form = res.data
         console.log(res.data)
       })
+      }.bind(this),5000)
     },
     total1(){
-      axios.post(`http://localhost:8000/api/surveytotal1/${this.$route.params.form}`,{
-        totaloption1:this.form.totaloption1,
+    
+        axios.post(`http://localhost:8000/api/surveytotal1/${this.$route.params.form}`,{
+          totaloption1:this.form.totaloption1,
       })
       .then(res => {
         this.form = res.data.totaloption1 + 1
@@ -75,13 +79,14 @@ export default {
         this.form={}
         return this.getSurvey()
       })
+   
     },
     total2(){
       axios.post(`http://localhost:8000/api/surveytotal2/${this.$route.params.form}`,{
         totaloption1:this.form.totaloption2,
       })
       .then(res => {
-        
+        console.log(res.data.data)
         this.form = res.data.totaloption2
         this.$toasted.global.voteSuccess()
         this.getSurvey()
@@ -92,7 +97,7 @@ export default {
         totaloption1:this.totaloption3,
       })
       .then(res => {
-        
+        console.log(res.data.data)
         this.form = res.data.totaloption3
         this.$toasted.global.voteSuccess()
         this.getSurvey()

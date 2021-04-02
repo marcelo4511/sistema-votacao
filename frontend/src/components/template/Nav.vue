@@ -1,8 +1,24 @@
 <template>
   <aside>
-   
-     <ul class="title">
-      <router-link to="/" tag="span">
+     <div class="container">
+      <div class="navbar-header">
+      </div>
+      <ul class="nav navbar-nav">
+        <router-link v-if="!isLoggedIn" class="nav-item nav-link" :to="{ name: 'Login' }">Login</router-link>
+       
+        <router-link
+          v-if="!isLoggedIn"
+          class="nav-item nav-link"
+          :to="{ name: 'Register' }"
+        >Register</router-link>
+
+        <router-link
+          v-if="!isLoggedIn"
+          class="nav-item nav-link"
+         to="/login"
+        >Dashboard</router-link>
+
+       <router-link to="/" tag="span">
         <li>
          <i class="fa fa-home"></i> Home
         </li>
@@ -13,16 +29,28 @@
         <i class="fa fa-comments"></i> Enquetes
        </li>
        </router-link>
-       
-     </ul>
+        <a class="nav-item nav-link" v-if="isLoggedIn" @click.prevent="logout" href="#">Logout</a>
+      </ul>
+    </div>
   </aside>
 </template>
 
 <script>
-
+import User from "../../config/User";
+import { mapGetters } from "vuex";
 export default {
-  
- 
+   computed: {
+    ...mapGetters(["isLoggedIn"])
+  },
+   methods: {
+    logout() {
+      User.logout().then(() => {
+        localStorage.removeItem("token");
+        this.$store.commit("isLoggedIn",false);
+        return  location.reload() && this.$router.push('/login');
+      });
+    }
+  }
 }
 </script>
 <style>

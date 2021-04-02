@@ -1,18 +1,54 @@
 <template>
   <header>
-    
+    <div class="d-flex justify-content-md-end mr-3 mt-2">
+      <router-link class="btn btn btn-write" to="/survey" tag="span">
+        <i class="fa fa-comments"></i> Enquetes
+       </router-link>
+     <div class="dropdown" >
+        <button class="drops btn btn-write dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span >{{user.nome}}</span>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <span class="d-flex justify-content-beetween dropdown-item" @click="sair()">Sair
+          </span>
+        </div>
+      </div>
+    </div>
   </header>
-
-  
 </template>
 
 <script>
 
 
+import User from "../../config/User";
+import { mapGetters, mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState({
+      user: state => state.user
+    }),
+    ...mapGetters(['Logged'])
+  },
+
+  mounted() {
+    User.auth().then(response => {
+      this.$store.commit("AUTH_USER", response.data);
+    });
+  },
+   methods: {
+    sair() {
+      User.logout().then(() => {
+        localStorage.removeItem("token");
+        this.$store.commit("Logged",false);
+        return this.$router.push('/login') && location.reload()   
+      });
+    }
+  }
+};
   
     
-}
+
 </script>
 
 <style>

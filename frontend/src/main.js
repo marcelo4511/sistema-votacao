@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './config/routes'
 import VueMaterial from 'vue-material'
+import store from "./store";
 import './config/filterData'
 import './config/messages'
 import 'bootstrap'
@@ -20,4 +21,5 @@ Vue.use(VueMaterial)
 new Vue({
   render: h => h(App),
   router,
+  store,
 }).$mount('#app')

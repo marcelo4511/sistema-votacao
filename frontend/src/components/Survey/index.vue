@@ -152,6 +152,7 @@
 
 <script>
   import axios from 'axios'
+  import User from "../../config/User";
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -396,6 +397,11 @@
         }
       }
     },
+    mounted() {
+    User.auth().then(response => {
+      this.$store.commit("AUTH_USER", response.data);
+    });
+  }
   }
 </script>
 

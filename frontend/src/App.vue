@@ -1,22 +1,21 @@
 <template>
   <div id="app">
        
-     <Nav/>
-     <Header />
+     <Header v-if="isLoggedIn"/>
      <Main/>
-     <Footer/>
   </div>
 </template>
 
 <script>
- import Nav from './components/template/Nav'
  import Main from './components/template/Main'
  import Header from './components/template/Header'
- import Footer from './components/template/Footer'
- 
+ import { mapGetters } from "vuex";
 export default {
-  components: { Main,Nav,Header,Footer},
   
+  components: { Main,Header},
+  computed: {
+    ...mapGetters(["isLoggedIn"]), 
+  },
 }
 </script>
 
@@ -31,22 +30,20 @@ export default {
 
   #app {
     display:grid;
-    grid-template-rows: 60px 1fr 30px;
-		grid-template-columns: 200px 1fr;
+    grid-template-rows: 60px;
+		grid-template-columns:1fr;
     height: 100vh;
     width: 100vw;
     grid-template-areas: 
-    "header header"
-    "lado main"
-    "lado footer"
+    "header"
+    "main"
     ;
     
   }
  #app.hide-menu {
 		grid-template-areas:
-			"header header"
-			"main main"
-      "main footer"
+			"header"
+			"main"
 			;
 	}
 aside .lado{
@@ -66,7 +63,6 @@ footer .footer {
   #app {
     grid-template-rows:
     50px
-    300px
     1fr;
 
     grid-template-columns:  1fr;
@@ -74,7 +70,6 @@ footer .footer {
 
     grid-template-areas: 
      "header"
-     "lado "
      "main "
     ;
   }
@@ -86,14 +81,12 @@ footer .footer {
     grid-template-rows:
    
     50px
-    100px
     1fr;
 
     grid-template-columns:  1fr;
 
     grid-template-areas: 
     "header"
-    "lado "
      "main"
   }
 }

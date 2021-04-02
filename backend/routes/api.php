@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
     Route::get('/survey','SurveyController@index');
-   // Route::get('/search','SurveyController@search');
+    //->middleware('auth:api');
     Route::get('/survey/{id}','SurveyController@show');
     Route::post('/survey','SurveyController@store');
     Route::post('/surveytotal1/{id}','SurveyController@save1');
@@ -28,3 +28,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::put('/survey/{id}','SurveyController@update');
     Route::delete('/survey/{id}','SurveyController@destroy');
 
+    route::post('/login' , 'LoginController@login');
+    route::post('/register' , 'LoginController@store');
+    Route::post('/logout', 'LoginController@logout')->middleware('auth:api');
