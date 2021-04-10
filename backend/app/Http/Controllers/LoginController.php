@@ -32,8 +32,10 @@ class LoginController extends Controller
                 'email' => ['as credenciais fornecidas são incorretas']
             ]);
         }
+    //    return $user->createToken('Auth Token')->accessToken;
+ //return response()->json(['token' => $user->createToken('Auth Token')->accessToken,'identidade' => $user->id,$user->nome => 'Bem vindo ao Sistema!!','status' => $user->nome . '  vc esta logado com sucesso aee!!']);
 
-        return $user->createToken('Auth Token')->accessToken;
+ return response()->json($user->createToken('Auth Token')->accessToken);
     }
 
     public function store(Request $request)

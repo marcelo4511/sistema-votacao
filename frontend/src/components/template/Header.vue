@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="d-flex justify-content-md-end mr-3 mt-2">
-      <router-link class="btn btn btn-write" to="/survey" tag="span">
+      <router-link v-if="isLoggedIn" class="btn btn btn-write" to="/survey" tag="span">
         <i class="fa fa-comments"></i> Enquetes
        </router-link>
      <div class="dropdown" >
@@ -19,7 +19,7 @@
 
 <script>
 
-
+import * as Cookie from 'js-cookie'
 import User from "../../config/User";
 import { mapGetters, mapState } from "vuex";
 
@@ -28,7 +28,7 @@ export default {
     ...mapState({
       user: state => state.user
     }),
-    ...mapGetters(['Logged'])
+    ...mapGetters(['isLoggedIn'])
   },
 
   mounted() {
@@ -38,8 +38,8 @@ export default {
   },
    methods: {
     sair() {
-      User.logout().then(() => {
-        localStorage.removeItem("token");
+        User.logout().then(() => {
+        Cookie.remove('vuex');
         this.$store.commit("Logged",false);
         return this.$router.push('/login') && location.reload()   
       });

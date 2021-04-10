@@ -61,33 +61,17 @@ const router =  new VueRouter({
     routes
 })
 
-function isLoggedIn() {
-    return localStorage.getItem("token");
-}
-
-router.beforeEach((to,from,next) => {
-    if(to.matched.some(record => record.meta.authOnly)) {
-        if(!isLoggedIn()) {
-            next({
-                path:"/login",
-                query:{redirect:to.fullPath}
-            });
-        }else {
-            next();
-        }
-    }else if (to.matched.some(record => record.meta.guestOnly)) {
-        if(isLoggedIn()) {
-            next({
-                path:"/dashboard",
-                query:{redirect:to.fullPath}
-            });
-        }else {
-            next();
-        }
-    }else {
-        next();
+router.beforeEach((to, from, next) => {
+    const loggedIn = localStorage.getItem('token')
+  
+    if (to.matched.some(record => record.meta.auth) && !loggedIn) {
+      next('/login')
+      return
     }
-});
+    next()
+  })
+
+
 
 export default router;
 

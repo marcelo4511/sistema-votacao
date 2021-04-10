@@ -109,7 +109,7 @@
           <md-table-row v-for="(form,key) in survey" :key="key">
 
              <tr class="" v-if="survey.length === 0">
-              <td class="lead text-center" :colspan="columns.length + 1">não há registros.</td>
+                <td class="lead text-center" :colspan="columns.length + 1">não há registros.</td>
                 <td class="lead text-center">não há registros.</td>
             </tr>
             <md-table-cell>{{form.title}}</md-table-cell>

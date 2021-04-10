@@ -33,8 +33,8 @@ class loginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'          => 'required',
-            'password'         => 'required|min:8',
+            'email'  => 'required',
+            'password'  => 'required|min:8',
         ];
     }
 

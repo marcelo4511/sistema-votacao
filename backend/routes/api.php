@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-    Route::get('/survey','SurveyController@index');
+    Route::get('/survey','SurveyController@index')->middleware('auth:api');
     //->middleware('auth:api');
     Route::get('/survey/{id}','SurveyController@show');
     Route::post('/survey','SurveyController@store');
