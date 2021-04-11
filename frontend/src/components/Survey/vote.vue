@@ -6,7 +6,7 @@
       </md-toolbar>
 
       <md-list>
-        <md-item class="md-layout-item md-layout md-gutter option">
+        <div class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
             <h4><i class="fa fa-arrow-right"></i> {{form.option1}}</h4>
           </div>
@@ -16,9 +16,9 @@
           <div class="md-layout-item md-size-50">
             <h4>{{form.totaloption1}}</h4>
           </div>
-        </md-item>
+        </div>
 
-        <md-item class="md-layout-item md-layout md-gutter option">
+        <div class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
             <h4><i class="fa fa-arrow-right"></i> {{form.option2}}</h4>
           </div>
@@ -28,9 +28,9 @@
           <div class="md-layout-item md-size-50">
             <h4>{{form.totaloption2}}</h4>
           </div>
-        </md-item>
+        </div>
 
-        <md-item class="md-layout-item md-layout md-gutter option">
+        <div class="md-layout-item md-layout md-gutter option">
           <div class="md-layout-item">
             <h4><i class="fa fa-arrow-right"></i> {{form.option3}}</h4>
           </div>
@@ -40,18 +40,18 @@
           <div class="md-layout-item md-size-50">
             <h4>{{form.totaloption3}}</h4>
           </div>
-        </md-item>
+        </div>
       </md-list>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import Api from '../../config/api'
 export default {
   created(){
     this.getSurvey()
-  
+    this.getVote()
   },
   data(){
     return {
@@ -60,17 +60,19 @@ export default {
   },
   methods:{
      getSurvey(){
-         setInterval(function () {
-       axios.get(`http://localhost:8000/api/survey/${this.$route.params.form}`)
-      .then(res => {
-        this.form = res.data
-        console.log(res.data)
-      })
+        setInterval(function () {
+          Api().get(`/survey/${this.$route.params.form}`).then(res => {
+            this.form = res.data
+          })
       }.bind(this),5000)
     },
+    getVote(){
+      Api().get(`/survey/${this.$route.params.form}`).then(res => {
+        this.form = res.data
+      })
+    },
     total1(){
-    
-        axios.post(`http://localhost:8000/api/surveytotal1/${this.$route.params.form}`,{
+        Api().post(`surveytotal1/${this.$route.params.form}`,{
           totaloption1:this.form.totaloption1,
       })
       .then(res => {
@@ -82,25 +84,23 @@ export default {
    
     },
     total2(){
-      axios.post(`http://localhost:8000/api/surveytotal2/${this.$route.params.form}`,{
+      Api().post(`surveytotal2/${this.$route.params.form}`,{
         totaloption1:this.form.totaloption2,
       })
       .then(res => {
-        console.log(res.data.data)
         this.form = res.data.totaloption2
         this.$toasted.global.voteSuccess()
-        this.getSurvey()
+        return this.getSurvey()
       })
     },
     total3(){
-      axios.post(`http://localhost:8000/api/surveytotal3/${this.$route.params.form}`,{
+      Api().post(`surveytotal3/${this.$route.params.form}`,{
         totaloption1:this.totaloption3,
       })
       .then(res => {
-        console.log(res.data.data)
         this.form = res.data.totaloption3
         this.$toasted.global.voteSuccess()
-        this.getSurvey()
+        return this.getSurvey()
       })
     },
   }

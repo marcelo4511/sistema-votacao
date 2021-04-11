@@ -11,7 +11,6 @@ let Api = function () {
         BaseApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         
     }
-    console.log(token)
 
     return BaseApi;
 }

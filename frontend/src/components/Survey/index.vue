@@ -114,7 +114,7 @@
             </tr>
             <md-table-cell>{{form.title}}</md-table-cell>
             <md-table-cell>{{form.dateinicial | formatDate}}</md-table-cell>
-            <md-table-cell>{{form.datefinal | formatDate}}</md-table-cell>
+            <md-table-cell>{{form.datefinal |formatDate}}</md-table-cell>
             <md-table-cell>{{form.status}}</md-table-cell>
             <md-table-cell>
               <md-button :to="`/survey/${form.id}/vote`" v-show="form.status === 'em andamento'"  tag="button" class="md-raised md-black linha"><i class="fa fa-check-square">Votar</i></md-button>
@@ -151,7 +151,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import Api from '../../config/api'
   import User from "../../config/User";
   import { validationMixin } from 'vuelidate'
   import {
@@ -256,7 +256,7 @@
     },
      async surveyUser () {
         this.sending = true
-         await axios.post('http://localhost:8000/api/survey',{
+         await Api().post(`/survey`,{
             title:this.form.title,
             dateinicial:this.form.dateinicial,
             datefinal:this.form.datefinal,
@@ -285,7 +285,7 @@
       return (this.currentPage - 1) * this.perPage + 1 + key
     },
       updateSurvey(){
-        axios.put(`http://localhost:8000/api/survey/${this.form.id}`,{
+        Api().put(`/survey/${this.form.id}`,{
            title:this.form.title,
             dateinicial:this.form.dateinicial,
             datefinal:this.form.datefinal,
@@ -316,7 +316,7 @@
       },
         navigate(){
           
-          axios.get(`http://localhost:8000/api/survey?page=${this.currentPage}&pesquisa=${this.search}&column=${this.sortedColumn}&order=${this.order}&per_page=${this.perPage}`)
+          Api().get(`survey?page=${this.currentPage}&pesquisa=${this.search}&column=${this.sortedColumn}&order=${this.order}&per_page=${this.perPage}`)
           .then( ({ data }) => {
             this.survey = data.data
             this.pagination = data
@@ -344,9 +344,9 @@
       this.navigate()
     },
       async removeSurvey(form){
-         let response = confirm(`Está certo de que fazer isso??${form.title}`)
+         let response = confirm(`Está certo de quer fazer isso??${form.title}`)
           if(response) {
-            await axios.delete(`http://localhost:8000/api/survey/${form.id}`,{
+            await Api().delete(`survey/${form.id}`,{
               }).then(res => {
                 this.survey.splice(res.data.id,form)
             this.navigate()

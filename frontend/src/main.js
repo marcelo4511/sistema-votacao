@@ -4,6 +4,7 @@ import router from './config/routes'
 import VueMaterial from 'vue-material'
 import store from "./store";
 import axios from 'axios'
+import formatDate from './config/filterData'
 import './config/messages'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,12 +23,8 @@ new Vue({
   render: h => h(App),
   router,
   store,
+  formatDate,
   created () {
-  //  const userInfo = localStorage.getItem('user')
-  //  if (userInfo) {
-   //   const userData = JSON.parse(userInfo)
-     // this.$store.commit('User/setUserData', userData)
-  // }
     axios.interceptors.response.use(
       response => response,
       error => {

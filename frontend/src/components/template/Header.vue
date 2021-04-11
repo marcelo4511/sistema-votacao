@@ -2,11 +2,13 @@
   <header>
     <div class="d-flex justify-content-md-end mr-3 mt-2">
       <router-link v-if="isLoggedIn" class="btn btn btn-write" to="/survey" tag="span">
-        <i class="fa fa-comments"></i> Enquetes
+        <div style="color:white;">
+            <i class="fa fa-comments"></i> <b >Enquetes</b> 
+        </div >
        </router-link>
-     <div class="dropdown" >
-        <button class="drops btn btn-write dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span >{{user.nome}}</span>
+     <div class="dropdown">
+        <button class="drops btn btn-write dropdown-toggle" style="color:white;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <b style="color:white;">{{user.nome}}</b>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <span class="d-flex justify-content-beetween dropdown-item" @click="sair()">Sair
