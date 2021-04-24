@@ -80,7 +80,7 @@ footer .footer {
     grid-auto-rows: 100;
     grid-template-rows:
    
-    50px
+    150px
     1fr;
 
     grid-template-columns:  1fr;
@@ -89,6 +89,7 @@ footer .footer {
     "header"
      "main"
   }
+  
 }
 
 </style> 
