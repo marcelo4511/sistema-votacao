@@ -30,8 +30,8 @@ export default {
     return {
       loading:false,
       form: {
-        email: "",
-        password: ""
+        email: null,
+        password:null
       },
       errors: []
     };
@@ -42,12 +42,12 @@ export default {
   },
   methods: {
     login() {
-      User.login(this.form)
-        .then(response => {
+      User.login(this.form).then(response => {
           this.$store.commit("LOGIN", true);
           localStorage.setItem("token", response.data);
-          this.$router.push('/home');
           window.location.href = '/'
+          this.$router.push('/home');
+          this.$toasted.global.defaultSuccess()
         })
         .catch(error => {
           if (error.response.status === 422) {

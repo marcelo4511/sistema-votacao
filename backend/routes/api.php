@@ -2,7 +2,14 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:api']], function (){
-    route::get('/user' , 'LoginController@user');
+    route::get('/user' , 'AuthController@user');
+    Route::post('/logout', 'AuthController@logout');
+
+    route::get('/users' , 'UserController@index');
+    route::post('/user' , 'UserController@store');
+    route::put('/user/{id}' , 'UserController@update');
+    route::delete('/user/{id}' , 'UserController@destroy');
+
     Route::get('/survey','SurveyController@index');
     Route::get('/survey/{id}','SurveyController@show');
     Route::post('/survey','SurveyController@store');
@@ -11,9 +18,8 @@ Route::group(['middleware' => ['auth:api']], function (){
     Route::post('/surveytotal3/{id}','SurveyController@save3');
     Route::put('/survey/{id}','SurveyController@update');
     Route::delete('/survey/{id}','SurveyController@destroy');
-    Route::post('/logout', 'LoginController@logout');
 });
 
-    route::post('/login' , 'LoginController@login');
-    route::post('/register' , 'LoginController@store');
+    route::post('/login' , 'AuthController@login');
+    route::post('/register' , 'AuthController@register');
     

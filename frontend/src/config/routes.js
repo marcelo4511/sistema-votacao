@@ -5,6 +5,7 @@ import Home from '../components/template/Home'
 import Login from '../components/Auth/Login'
 import Register from '../components/Auth/Register'
 import Survey from '../components/Survey/index'
+import User from '../components/Users/index'
 import SurveyVote from '../components/Survey/vote'
 
 Vue.use(VueRouter)
@@ -37,6 +38,11 @@ const routes = [{
     path:'/survey',                                                                                                                                                                                                                       
     component:Survey,
     meta: { auth: true }
+},{
+  name:'user',
+  path:'/user',                                                                                                                                                                                                                       
+  component:User,
+  meta: { auth: true }
 },{
     name:'surveyVote',
     path:'/survey/:form/vote',                                                                                                                                                                                                                       

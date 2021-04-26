@@ -7,7 +7,7 @@
          </div>
          <div class="card">
       <div class="card-body" v-if="user">
-        <h3>Hello, {{ user.name }}</h3>
+        <h3>Hello, {{ user.nome }}</h3>
         <span>{{ user.email }}</span>
       </div>
     </div>

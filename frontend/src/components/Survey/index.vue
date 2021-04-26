@@ -154,10 +154,7 @@
   import Api from '../../config/api'
   import User from "../../config/User";
   import { validationMixin } from 'vuelidate'
-  import {
-    required,
-    minLength
-  } from 'vuelidate/lib/validators'
+  import { required,minLength } from 'vuelidate/lib/validators'
 
   export default {
     name: 'FormValidation',
@@ -308,11 +305,11 @@
       },
       
               
-       validateSurvey () {
-           this.$v.$touch()
-            if (!this.$v.$invalid) {
-              this.surveyUser()
-            }
+      validateSurvey () {
+        this.$v.$touch()
+        if (!this.$v.$invalid) {
+          this.surveyUser()
+        }
       },
         navigate(){
           
@@ -346,10 +343,10 @@
       async removeSurvey(form){
          let response = confirm(`Está certo de quer fazer isso??${form.title}`)
           if(response) {
-            await Api().delete(`survey/${form.id}`,{
-              }).then(res => {
-                this.survey.splice(res.data.id,form)
-            this.navigate()
+            await Api().delete(`survey/${form.id}`).then(res => {
+              this.survey.splice(res.data.id,form)
+              this.$toasted.global.defaultSuccess()
+              this.navigate()
           })
          }
       }

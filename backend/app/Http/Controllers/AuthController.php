@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function user(Request $request) 
     {
@@ -14,7 +14,6 @@ class LoginController extends Controller
     }
     public function login(Request $request)
     {
-      
         $regras = [
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -37,7 +36,7 @@ class LoginController extends Controller
         return response()->json($user->createToken('Auth Token')->accessToken);
     }
 
-    public function store(Request $request)
+    public function register(Request $request)
     {
         $rules = [
             'nome' => ['required'],
@@ -53,7 +52,6 @@ class LoginController extends Controller
             'email.required' => 'Digite um endereço de email.',
             'email.email' => 'Digite um endereço de email válido',
             'email.unique' => 'Endereço de E-mail já cadastrado!',
-
         ];
 
         $request->validate($rules, $mensagens);

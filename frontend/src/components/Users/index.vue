@@ -1,100 +1,68 @@
 <template>
 <div>
-      <form novalidate class="md-layout" @submit.prevent="validateSurvey">
+      <form novalidate class="md-layout" @submit.prevent="validateUsers">
       <md-card class="md-layout-item">
         <md-card-header>
-          <div class="md-title">Enquete</div>
+          <h5 class="md-nome">Usuários</h5>
         </md-card-header>
 
         <md-card-content>
           <div class="md-layout md-gutter">
-
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('title')">
-                <label for="title">Título</label>
-                <md-input name="title" id="title" autocomplete="given-name" v-model="form.title" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.title.required">O Título é requirido</span>
-                <span class="md-error" v-else-if="!$v.form.title.minlength">Título inválido</span>
-              </md-field>
-            </div>
-
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('dateinicial')">
-                <label for="dateinicial">Data Inicial</label>
-                <md-input placeholder="data inicial" type="date" name="dateinicial" autocomplete="given-name" :disabled="sending" id="dateinicial" v-model="form.dateinicial"/>
-                <span class="md-error" v-if="!$v.form.dateinicial.required">A data inicial é requirida</span>
-              </md-field>
-            </div>
-          
-
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('datefinal')">
-                <label for="datefinal">Data Final</label>
-                <md-input type="date" name="datefinal" placeholder="data final" autocomplete="given-name" :disabled="sending" id="datefinal" v-model="form.datefinal"/>
-                <span class="md-error" v-if="!$v.form.datefinal.required">A data final é requirida</span>
+              <md-field :class="getValidationClass('nome')">
+                <label for="nome">Nome</label>
+                <md-input name="nome" id="nome" autocomplete="given-name" v-model="form.nome" :disabled="sending" />
+                <span class="md-error" v-if="!$v.form.nome.required">O Nome é requirido</span>
+                <span class="md-error" v-else-if="!$v.form.nome.minlength">Nome é no mínimo 3 caracteres</span>
               </md-field>
             </div>
           </div>
-
           <div class="md-layout md-gutter">
 
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('option1')">
-                <label for="option1">Opção 1</label>
-                <md-input name="option1" id="option1" autocomplete="given-name" v-model="form.option1" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.option1.required">A opção 1 é requirida</span>
-                <span class="md-error" v-else-if="!$v.form.option1.minlength">Opção 1 inválida</span>
+              <md-field :class="getValidationClass('email')">
+                <label for="option1">Email</label>
+                <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
+                <span class="md-error" v-if="!$v.form.email.required">O E-mail é requerido</span>
+                <span class="md-error" v-else-if="!$v.form.email.email">O E-mail é inválido</span>
               </md-field>
             </div>
             
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('option2')">
-                <label for="option2">Opção 2</label>
-                <md-input name="option2" id="option2" autocomplete="given-name" v-model="form.option2" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.option2.required">A opção 2 é requirida</span>
-                <span class="md-error" v-else-if="!$v.form.option2.minlength">Opção 2 inválida</span>
-              </md-field>
-            </div>
-
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('option3')">
-                <label for="option3">Opção 3</label>
-                <md-input name="option3" id="option3" autocomplete="given-name" v-model="form.option3" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.option3.required">A opção 3 é requirida</span>
-                <span class="md-error" v-else-if="!$v.form.option3.minlength">Opção 3 inválida</span>
+              <md-field :class="getValidationClass('password')">
+                <label for="password">Senha</label>
+                <md-input name="password" id="password" type="password" autocomplete="password" v-model="form.password" :disabled="sending" />
+                <span class="md-error" v-if="!$v.form.password.required">A senha é requirida</span>
+                <span class="md-error" v-else-if="!$v.form.password.minlength">A senha é no mínimo 8 caracteres</span>
               </md-field>
             </div>
           </div>  
-         
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button v-if="isEdit === false" type="submit" class="md-raised md-primary" :disabled="sending">Criar Enquete</md-button>
-          <md-button v-else-if="isEdit === true" type="button" class="md-raised md-primary" @click="updateSurvey">Atualizar Enquete</md-button>
+          <md-button v-if="isEdit === false" type="submit" class="md-raised md-primary" :disabled="sending">Criar Usuário</md-button>
+          <md-button v-else-if="isEdit === true" type="button" class="md-raised md-primary" @click="updateUsers">Atualizar Usuário</md-button>
         </md-card-actions>
       </md-card>
 
-      <md-snackbar :md-active.sync="surveySaved">A enquete foi salva com sucesso!</md-snackbar>
-      <md-snackbar :md-active.sync="surveyUpdated">A enquete foi atualizada com sucesso!</md-snackbar>
-      
-      
+      <md-snackbar :md-active.sync="UsersSaved">O usuário foi salvo com sucesso!</md-snackbar>
+      <md-snackbar :md-active.sync="UsersUpdated">O usuário foi atualizado com sucesso!</md-snackbar>
     </form>
 
     <div class="row d-flex justify-content-between">
-
       <select name="" id="" class="form-control col-md-1 mt-5 ml-4" v-model="perPage" @change="navigate">
           <option selected default value="0"></option>
           <option :value="5">5</option>
           <option :value="10">10</option>
           <option :value="15">15</option>
       </select>
-      <input type="search" style="float:center;" class="form-control col-md-3 mt-5 mr-5" placeholder="Buscar" v-model.trim="search" @input="getSurvey">
+      <input type="search" style="float:center;" class="form-control col-md-3 mt-5 mr-5" placeholder="Buscar" v-model.trim="search" @input="getUsers">
     </div>
 
       <md-table class="mt-2">
-        <md-table-row>
+        <md-table-row >
           <th v-for="column in columns" :key="column" @click="sortByColumn(column)"
               class="table-head">
             {{ column| columnHead }}
@@ -106,32 +74,27 @@
           </th>
     
         </md-table-row>
-          <md-table-row v-for="(form,key) in survey" :key="key">
-
-             <tr class="" v-if="survey.length === 0">
+          <md-table-row  width="10px" v-for="(form,key) in users" :key="key">
+             <tr class="" v-if="users.length === 0">
                 <td class="lead text-center" :colspan="columns.length + 1">não há registros.</td>
                 <td class="lead text-center">não há registros.</td>
             </tr>
-            <md-table-cell>{{form.title}}</md-table-cell>
-            <md-table-cell>{{form.dateinicial | formatDate}}</md-table-cell>
-            <md-table-cell>{{form.datefinal |formatDate}}</md-table-cell>
-            <md-table-cell>{{form.status}}</md-table-cell>
+            <md-table-cell>{{form.nome}}</md-table-cell>
+            <md-table-cell>{{form.email}}</md-table-cell>
             <md-table-cell>
-              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status === 'em andamento'"  tag="button" class="md-raised md-black linha"><i class="fa fa-check-square">Votar</i></md-button>
-              <md-button :to="`/survey/${form.id}/vote`" v-show="form.status !== 'em andamento'" disabled="disabled" tag="button" class="md-raised md-black linha" ><i class="fa fa-check-square">Votar</i></md-button>
-              <md-button class="md-raised md-primary" v-on:click="editSurvey(form)"><i class="fa fa-pencil"></i> Editar</md-button>
-              <md-button class="md-raised md-accent" v-on:click="removeSurvey(form)"><i class="fa fa-trash"></i>Deletar</md-button>
+              <md-button class="md-raised md-primary" v-on:click="editUsers(form)"><i class="fa fa-pencil"></i> Editar</md-button>
+              <md-button class="md-raised md-accent" v-on:click="removeUsers(form)"><i class="fa fa-trash"></i>Deletar</md-button>
             </md-table-cell>
           </md-table-row>
       </md-table>
 
-      <div class="mt-2" v-show="survey == 0">
-          <div style="text-align:center;">Não há enquetes.</div>
+      <div class="mt-2" v-show="users == 0">
+          <div style="text-align:center;">Não há Usuários.</div>
       </div>
 
-      <div class="form-row d-flex justify-content-between mt-1">
+    <div class="form-row d-flex justify-content-between mt-1">
       <span> &nbsp; <i>Mostrando de  {{ pagination.from }} até  {{ pagination.to }} de {{ pagination.total }} registros.</i></span>
-      <nav v-if="pagination && survey.length > 0" >
+      <nav v-if="pagination && users.length > 0" >
         <ul class="pagination">
           <li class="page-item" :class="{'disabled' : currentPage === 1}">
             <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Anterior</a>
@@ -145,8 +108,7 @@
           </li>
         </ul>
       </nav>
-        
-      </div>
+    </div>
   </div>
 </template>
 
@@ -154,26 +116,19 @@
   import Api from '../../config/api'
   import User from "../../config/User";
   import { validationMixin } from 'vuelidate'
-  import {
-    required,
-    minLength
-  } from 'vuelidate/lib/validators'
+  import { required,email,minLength } from 'vuelidate/lib/validators'
 
   export default {
     name: 'FormValidation',
     mixins: [validationMixin],
     data: () => ({
       form: {
-        title: '',
-        dateinicial: new Date,
-        datefinal: new Date,
-        option1: null,
-        option2: null,
-        option3: null,
-        status_id:''
+        nome: null,
+        email: null,
+        password: null,
       },
       search:'',
-      survey:[],
+      users:[],
       url: '',
       pagination: {
         data: { to: 1, from: 1 }
@@ -182,34 +137,27 @@
       currentPage: 1,
       perPage: 5,
       isEdit:false,
-      surveySaved: false,
-      surveyUpdated:false,
+      UsersSaved: false,
+      UsersUpdated:false,
       sending: false,
       lastUser: null,
-      columns:['title','dateinicial','datefinal','status'],
-      sortedColumn:['title'],
+      columns:['nome','email'],
+      sortedColumn:['nome'], 
       order: 'asc',
     }),
     validations: {
       form: {
-        title: {
+        nome: {
           required,
           minLength: minLength(3)
         },
-        dateinicial: {
-          required
-        },
-        datefinal: {
+        email: {
           required,
+          email,
         },
-        option1:{
+        password: {
           required,
-        },
-        option2:{
-          required,
-        },
-        option3:{
-          required,
+          minLength: minLength(8)
         },
       }
     },
@@ -229,18 +177,15 @@
       },
       
       getIf(){
-        if(this.columns[0] == 'title') {
+        if(this.columns[0] == 'nome') {
           return this.columns[0] = 'Título'
         }
       },
       clearForm () {
         this.$v.$reset()
-        this.form.title = null
-        this.form.dateinicial = null
-        this.form.datefinal = null
-        this.form.option1 = null
-        this.form.option2 = null
-        this.form.option3 = null
+        this.form.nome = null
+        this.form.email = null
+        this.form.password = null
       },
         sortByColumn(column) {
       if (column === this.sortedColumn) {
@@ -251,104 +196,68 @@
       }
       this.navigate()
     },
-    getSurvey(){
+    getUsers(){
         this.navigate()
     },
-     async surveyUser () {
+     async UsersUser () {
         this.sending = true
-         await Api().post(`/survey`,{
-            title:this.form.title,
-            dateinicial:this.form.dateinicial,
-            datefinal:this.form.datefinal,
-            option1:this.form.option1,
-            option2:this.form.option2,
-            option3:this.form.option3,
-
-         }).then(resposta => {
-            this.survey.push(resposta.data)
+         await Api().post(`/user`,this.form).then(resposta => {
+            this.users.push(resposta.data)
             this.$toasted.global.defaultSuccess()
             this.navigate()
          })
         
         window.setTimeout(() => {
-          this.title = `${this.form.title}`
-          this.surveySaved = true
+          this.nome = `${this.form.nome}`
+          this.UsersSaved = true
           this.sending = false
           this.clearForm()
         }, 1500)
       },
-       editSurvey(form){   
+      editUsers(form){   
         this.isEdit = true
         this.form = form      
       },
-       serialNumber(key) {
-      return (this.currentPage - 1) * this.perPage + 1 + key
-    },
-      updateSurvey(){
-        Api().put(`/survey/${this.form.id}`,{
-           title:this.form.title,
-            dateinicial:this.form.dateinicial,
-            datefinal:this.form.datefinal,
-            option1:this.form.option1,
-            option2:this.form.option2,
-            option3:this.form.option3,
-
-         }).then(resposta => {
-            this.survey.push(resposta.data)
+      serialNumber(key) {
+        return (this.currentPage - 1) * this.perPage + 1 + key
+      },
+      updateUsers(){
+        Api().put(`/user/${this.form.id}`,this.form).then(resposta => {
+            this.users.push(resposta.data)
             this.isEdit = false
             this.navigate()
          })
         
         window.setTimeout(() => {
-          this.title = `${this.form.title}`
-          this.surveyUpdated = true
+          this.nome = `${this.form.nome}`
+          this.UsersUpdated = true
           this.sending = false
           this.clearForm()
         }, 1500)
       },
-      
               
-       validateSurvey () {
-           this.$v.$touch()
-            if (!this.$v.$invalid) {
-              this.surveyUser()
-            }
+       validateUsers () {
+        this.$v.$touch()
+        if (!this.$v.$invalid) {
+          this.UsersUser()
+        }
       },
         navigate(){
-          
-          Api().get(`survey?page=${this.currentPage}&pesquisa=${this.search}&column=${this.sortedColumn}&order=${this.order}&per_page=${this.perPage}`)
-          .then( ({ data }) => {
-            this.survey = data.data
+          Api().get(`users?page=${this.currentPage}&pesquisa=${this.search}&column=${this.sortedColumn}&order=${this.order}&per_page=${this.perPage}`).then( ({ data }) => {
+            this.users = data.data
             this.pagination = data
-            this.survey.map(form => {
-                  let dateNow = new Date()
-                   dateNow.toLocaleDateString("pt-BR")
-                  let dateinicial = new Date(form.dateinicial)
-                  dateinicial.toLocaleDateString("pt-BR")
-                  let datefinal = new Date(form.datefinal)
-                  datefinal.toLocaleDateString("pt-BR")
-
-                  if(dateinicial <= dateNow && datefinal >= dateinicial && datefinal >= dateNow){
-                  return form.status = 'em andamento'
-                } else if(datefinal <= dateNow){
-                  return form.status = 'finalizada'
-                }else if(dateinicial >= dateNow ){
-                  return form.status = 'não iniciada'
-                }
-            })
-            
         })
       },
       changePage(pageNumber) {
       this.currentPage = pageNumber
       this.navigate()
     },
-      async removeSurvey(form){
-         let response = confirm(`Está certo de quer fazer isso??${form.title}`)
+      async removeUsers(form){
+         let response = confirm(`Está certo de quer fazer isso??${form.nome}`)
           if(response) {
-            await Api().delete(`survey/${form.id}`,{
-              }).then(res => {
-                this.survey.splice(res.data.id,form)
+            await Api().delete(`user/${form.id}`).then(res => {
+            this.users.splice(res.data.id,form)
+            this.$toasted.global.defaultSuccess()
             this.navigate()
           })
          }
@@ -381,8 +290,8 @@
     filters: {
       columnHead(value) {
 
-      if(value == 'title') {
-        value = 'Título'
+      if(value == 'nome') {
+        value = 'Nome'
       }
         return value.split('_').join(' ').toUpperCase()
       },

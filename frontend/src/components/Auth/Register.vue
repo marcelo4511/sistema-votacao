@@ -71,10 +71,10 @@ export default {
   data() {
     return {
       form: {
-        nome: "",
-        email: "",
-        password: "",
-        password_confirmation: ""
+        nome: null,
+        email: null,
+        password: null,
+        password_confirmation: null
       },
       errors: []
     };
@@ -85,6 +85,7 @@ export default {
       User.register(this.form)
         .then(() => {
           this.$router.push({ name: "login" });
+          this.$toasted.global.defaultSuccess()
         })
         .catch(error => {
           if (error.response.status === 422) {

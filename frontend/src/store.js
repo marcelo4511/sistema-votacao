@@ -13,8 +13,8 @@ export default new Vuex.Store({
         createPersistedState({
           storage: {
             getItem: (key) => Cookies.get(key),
-           setItem: (key, value) =>
-              Cookies.set(key, value, { expires: 5, secure: true }),
+            setItem: (key, value) =>
+            Cookies.set(key, value, { expires: 5, secure: true }),
             removeItem: (key) => Cookies.remove(key),
           },
         }),
@@ -22,7 +22,6 @@ export default new Vuex.Store({
     getters:{
         isLoggedIn(state) {
             return !!state.user 
-
         }
     },
 
