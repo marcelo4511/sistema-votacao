@@ -7,12 +7,12 @@
           <label for="name">Nome:</label>
           <input
             type="text"
-            v-model="form.nome"
-            :class="errors.nome ? 'form-control is-invalid' : 'form-control'"
+            v-model="form.name"
+            :class="errors.name ? 'form-control is-invalid' : 'form-control'"
             id="name"
           />
-          <span class="text-danger" v-if="errors.nome">
-            {{ errors.nome[0] }}
+          <span class="text-danger" v-if="errors.name">
+            {{ errors.name[0] }}
           </span>
 
         </div>

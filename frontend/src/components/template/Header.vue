@@ -19,7 +19,7 @@
     <div>
       <div class="dropdown">
           <button class="drops btn btn-write dropdown-toggle teste2" style="color:white;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <b style="color:white;cursor:pointer;">{{user.nome}}</b>
+            <b style="color:white;cursor:pointer;">{{user.name}}</b>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="cursor:pointer;">
             <span class="d-flex justify-content-beetween dropdown-item" @click="sair()">Sair
@@ -48,7 +48,7 @@
       </div><br>
      <div class="dropdown" style="height:10px;">
         <button class="drops btn btn-write dropdown-toggle" style="color:white;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user"></i> <b style="color:white;"> {{user.nome}}</b>
+          <i class="fa fa-user"></i> <b style="color:white;"> {{user.name}}</b>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="cursor:pointer;">
           <span class="d-flex justify-content-beetween dropdown-item" @click="sair()">Sair
@@ -65,7 +65,7 @@
       </div><br>
      <div class="dropdown" style="height:10px;">
         <button class="drops btn btn-write dropdown-toggle" style="color:white;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user"></i> <b style="color:white;"> {{user.nome}}</b>
+          <i class="fa fa-user"></i> <b style="color:white;"> {{user.name}}</b>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="cursor:pointer;">
           <span class="d-flex justify-content-beetween dropdown-item" @click="sair()">Sair

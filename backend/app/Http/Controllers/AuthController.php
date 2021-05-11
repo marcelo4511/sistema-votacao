@@ -39,7 +39,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $rules = [
-            'nome' => ['required'],
+            'name' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', "min:8",'confirmed'],
             'password_confirmation' => ['required']
@@ -57,7 +57,7 @@ class AuthController extends Controller
         $request->validate($rules, $mensagens);
 
         User::create([
-            'nome' => $request->nome,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);

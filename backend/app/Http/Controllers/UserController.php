@@ -12,7 +12,7 @@ class UserController extends Controller
     {
     $pesquisa = $request->get('pesquisa');
         $Users = User::when($request['pesquisa'],function($query) use($pesquisa) {
-            $query->where('nome','LIKE',"$pesquisa%")
+            $query->where('name','LIKE',"$pesquisa%")
             ->orWhere("email",'LIKE',"$pesquisa%")
             ->orWhere("password",'LIKE',"$pesquisa%");
         })->orderBy($request->column, $request->order)->paginate(intval($request->per_page));

@@ -98,7 +98,6 @@
           <th v-for="column in columns" :key="column" @click="sortByColumn(column)"
               class="table-head">
             {{ column| columnHead }}
-            {{ column| col }}
             <span v-if="column === sortedColumn">
               <i v-if="order === 'asc' " class="fa fa-arrow-up"></i>
               <i v-else class="fa fa-arrow-down"></i>
@@ -380,19 +379,15 @@
 
       if(value == 'title') {
         value = 'Título'
+      } 
+      if(value=='dateinicial'){
+        value = 'Data Inicial'
+      }if(value=='datefinal'){
+        value = 'Data Final'
       }
         return value.split('_').join(' ').toUpperCase()
       },
-      col(value){
-             if(value == 'dateinicial') {
-              value = 'Data Inicial'
-             }
-      },
-      t(value) {
-        if(value == 'datefinal') {
-          value = 'Data Final'
-        }
-      }
+     
     },
     mounted() {
     User.auth().then(response => {
